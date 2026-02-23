@@ -32,43 +32,111 @@ class BinanceFuturesClient:
             query_string.encode("utf-8"),
             hashlib.sha256
         ).hexdigest()
+    
 
     def _send_request(self, method: str, endpoint: str, params: dict):
-        try:
-            params["timestamp"] = self._get_timestamp()
+        url = f"{self.base_url}{endpoint}"
 
-            query_string = urlencode(params)
-            signature = self._sign(query_string)
+        params["timestamp"] = self._get_timestamp()
+        query_string = urlencode(params)
+        signature = self._sign(query_string)
+        params["signature"] = signature
 
-            params["signature"] = signature
+        headers = {
+            "X-MBX-APIKEY": self.api_key
+        }
 
-            headers = {
-                "X-MBX-APIKEY": self.api_key
-            }
+        # Mask signature in logs
+        safe_params = params.copy()
+        safe_params.pop("signature", None)
 
-            url = f"{self.base_url}{endpoint}"
+        max_retries = 3
+        backoff_factor = 2
 
-            logger.info(f"Sending {method} request to {url}")
-            logger.info(f"Request params: {params}")
+        for attempt in range(1, max_retries + 1):
+            try:
+                logger.info(f"Sending {method} request to {url}")
+                logger.info(f"Request params: {safe_params}")
 
-            if method == "GET":
-                response = requests.get(url, headers=headers, params=params)
-            elif method == "POST":
-                response = requests.post(url, headers=headers, params=params)
-            else:
-                raise ValueError("Unsupported HTTP method")
+                if method == "GET":
+                    response = requests.get(
+                        url,
+                        headers=headers,
+                        params=params,
+                        timeout=10
+                    )
+                elif method == "POST":
+                    response = requests.post(
+                        url,
+                        headers=headers,
+                        params=params,
+                        timeout=10
+                    )
+                else:
+                    raise ValueError("Unsupported HTTP method")
 
-            logger.info(f"Response status: {response.status_code}")
-            logger.debug(f"Response body: {response.text}")
-            if response.status_code != 200:
-                logger.error(f"Error response: {response.text}")
-                raise Exception(f"Binance API Error: {response.text}")
+                logger.info(f"Response status: {response.status_code}")
 
-            return response.json()
+                # Retry only on server errors (5xx)
+                if response.status_code >= 500:
+                    raise requests.exceptions.RequestException(
+                        f"Server error: {response.status_code}"
+                    )
 
-        except requests.exceptions.RequestException as e:
-            logger.error(f"HTTP Request failed: {str(e)}")
-            raise
+                # Handle client errors (4xx) without retry
+                if response.status_code >= 400:
+                    logger.error(f"API Error: {response.text}")
+                    raise Exception(f"Binance API Error: {response.text}")
+
+                return response.json()
+
+            except requests.exceptions.RequestException as e:
+                logger.warning(f"Attempt {attempt} failed: {str(e)}")
+
+                if attempt == max_retries:
+                    logger.error("Max retries reached. Request failed.")
+                    raise Exception("Network error after multiple retries.")
+
+                sleep_time = backoff_factor ** attempt
+                logger.info(f"Retrying in {sleep_time} seconds...")
+                time.sleep(sleep_time)
+
+    # def _send_request(self, method: str, endpoint: str, params: dict):
+    #     try:
+    #         params["timestamp"] = self._get_timestamp()
+
+    #         query_string = urlencode(params)
+    #         signature = self._sign(query_string)
+
+    #         params["signature"] = signature
+
+    #         headers = {
+    #             "X-MBX-APIKEY": self.api_key
+    #         }
+
+    #         url = f"{self.base_url}{endpoint}"
+
+    #         logger.info(f"Sending {method} request to {url}")
+    #         logger.info(f"Request params: {params}")
+
+    #         if method == "GET":
+    #             response = requests.get(url, headers=headers, params=params, timeout=20)
+    #         elif method == "POST":
+    #             response = requests.post(url, headers=headers, params=params, timeout=20)
+    #         else:
+    #             raise ValueError("Unsupported HTTP method")
+
+    #         logger.info(f"Response status: {response.status_code}")
+    #         logger.debug(f"Response body: {response.text}")
+    #         if response.status_code != 200:
+    #             logger.error(f"Error response: {response.text}")
+    #             raise Exception(f"Binance API Error: {response.text}")
+
+    #         return response.json()
+
+    #     except requests.exceptions.RequestException as e:
+    #         logger.error(f"HTTP Request failed: {str(e)}")
+    #         raise
 
     # Public method to get account info
     def get_account_info(self):
