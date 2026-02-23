@@ -1,5 +1,6 @@
 import logging
 import os
+from logging.handlers import RotatingFileHandler
 
 # Get absolute path of project root
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -13,19 +14,28 @@ def setup_logger():
         os.makedirs(LOG_DIR)
 
     logger = logging.getLogger("trading_bot")
-    logger.setLevel(logging.INFO)
+    log_level = os.getenv("LOG_LEVEL", "INFO").upper()
+    logger.setLevel(getattr(logging, log_level))
 
+    # Prevent duplicate handlers
     if logger.handlers:
         return logger
 
-    file_handler = logging.FileHandler(LOG_FILE, encoding="utf-8")
-    file_handler.setLevel(logging.INFO)
+    # Rotating log file (max 5 MB, keep 3 backups)
+    file_handler = RotatingFileHandler(
+        LOG_FILE,
+        maxBytes=5 * 1024 * 1024,
+        backupCount=3,
+        encoding="utf-8"
+    )
+
+    file_handler.setLevel(getattr(logging, log_level))
 
     formatter = logging.Formatter(
-        "%(asctime)s - %(levelname)s - %(name)s - %(message)s"
+        "%(asctime)s | %(levelname)s | %(name)s | %(module)s:%(lineno)d | %(message)s"
     )
-    file_handler.setFormatter(formatter)
 
+    file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
 
     return logger

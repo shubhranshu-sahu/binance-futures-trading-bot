@@ -2,6 +2,7 @@ import os
 import time
 import hmac
 import hashlib
+from urllib import response
 import requests
 from urllib.parse import urlencode
 from dotenv import load_dotenv
@@ -58,8 +59,7 @@ class BinanceFuturesClient:
                 raise ValueError("Unsupported HTTP method")
 
             logger.info(f"Response status: {response.status_code}")
-            logger.info(f"Response body: {response.text}")
-
+            logger.debug(f"Response body: {response.text}")
             if response.status_code != 200:
                 logger.error(f"Error response: {response.text}")
                 raise Exception(f"Binance API Error: {response.text}")
