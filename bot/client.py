@@ -76,6 +76,7 @@ class BinanceFuturesClient:
                     raise ValueError("Unsupported HTTP method")
 
                 logger.info(f"Response status: {response.status_code}")
+                logger.debug(f"Response text: {response.text}")
 
                 # Retry only on server errors (5xx)
                 if response.status_code >= 500:
