@@ -1,0 +1,4 @@
+2026-02-23 22:02:48,868 | INFO | trading_bot | client:58 | Sending GET request to https://demo-fapi.binance.com/fapi/v2/account
+2026-02-23 22:02:48,869 | INFO | trading_bot | client:59 | Request params: {'timestamp': 1771864368868}
+2026-02-23 22:02:49,625 | INFO | trading_bot | client:78 | Response status: 200
+asd
