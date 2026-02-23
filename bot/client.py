@@ -101,42 +101,6 @@ class BinanceFuturesClient:
                 logger.info(f"Retrying in {sleep_time} seconds...")
                 time.sleep(sleep_time)
 
-    # def _send_request(self, method: str, endpoint: str, params: dict):
-    #     try:
-    #         params["timestamp"] = self._get_timestamp()
-
-    #         query_string = urlencode(params)
-    #         signature = self._sign(query_string)
-
-    #         params["signature"] = signature
-
-    #         headers = {
-    #             "X-MBX-APIKEY": self.api_key
-    #         }
-
-    #         url = f"{self.base_url}{endpoint}"
-
-    #         logger.info(f"Sending {method} request to {url}")
-    #         logger.info(f"Request params: {params}")
-
-    #         if method == "GET":
-    #             response = requests.get(url, headers=headers, params=params, timeout=20)
-    #         elif method == "POST":
-    #             response = requests.post(url, headers=headers, params=params, timeout=20)
-    #         else:
-    #             raise ValueError("Unsupported HTTP method")
-
-    #         logger.info(f"Response status: {response.status_code}")
-    #         logger.debug(f"Response body: {response.text}")
-    #         if response.status_code != 200:
-    #             logger.error(f"Error response: {response.text}")
-    #             raise Exception(f"Binance API Error: {response.text}")
-
-    #         return response.json()
-
-    #     except requests.exceptions.RequestException as e:
-    #         logger.error(f"HTTP Request failed: {str(e)}")
-    #         raise
 
     # Public method to get account info
     def get_account_info(self):

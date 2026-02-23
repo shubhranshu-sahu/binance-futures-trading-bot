@@ -1,4 +1,19 @@
-2026-02-23 22:02:48,868 | INFO | trading_bot | client:58 | Sending GET request to https://demo-fapi.binance.com/fapi/v2/account
-2026-02-23 22:02:48,869 | INFO | trading_bot | client:59 | Request params: {'timestamp': 1771864368868}
-2026-02-23 22:02:49,625 | INFO | trading_bot | client:78 | Response status: 200
-asd
+2026-02-23 22:13:29,033 | INFO | trading_bot | orders:19 | Placing MARKET order: {'symbol': 'BTCUSDT', 'side': 'BUY', 'type': 'MARKET', 'quantity': 0.01}
+2026-02-23 22:13:29,033 | INFO | trading_bot | client:58 | Sending POST request to https://demo-fapi.binance.com/fapi/v1/order
+2026-02-23 22:13:29,033 | INFO | trading_bot | client:59 | Request params: {'symbol': 'BTCUSDT', 'side': 'BUY', 'type': 'MARKET', 'quantity': 0.01, 'timestamp': 1771865009033}
+2026-02-23 22:13:29,982 | INFO | trading_bot | client:78 | Response status: 200
+2026-02-23 22:13:45,126 | INFO | trading_bot | orders:19 | Placing MARKET order: {'symbol': 'BTCUSDT', 'side': 'SELL', 'type': 'MARKET', 'quantity': 0.01}
+2026-02-23 22:13:45,126 | INFO | trading_bot | client:58 | Sending POST request to https://demo-fapi.binance.com/fapi/v1/order
+2026-02-23 22:13:45,127 | INFO | trading_bot | client:59 | Request params: {'symbol': 'BTCUSDT', 'side': 'SELL', 'type': 'MARKET', 'quantity': 0.01, 'timestamp': 1771865025126}
+2026-02-23 22:13:46,030 | INFO | trading_bot | client:78 | Response status: 200
+2026-02-23 22:13:53,793 | INFO | trading_bot | orders:39 | Placing LIMIT order: {'symbol': 'BTCUSDT', 'side': 'BUY', 'type': 'LIMIT', 'quantity': 0.01, 'price': 30000.0, 'timeInForce': 'GTC'}
+2026-02-23 22:13:53,793 | INFO | trading_bot | client:58 | Sending POST request to https://demo-fapi.binance.com/fapi/v1/order
+2026-02-23 22:13:53,794 | INFO | trading_bot | client:59 | Request params: {'symbol': 'BTCUSDT', 'side': 'BUY', 'type': 'LIMIT', 'quantity': 0.01, 'price': 30000.0, 'timeInForce': 'GTC', 'timestamp': 1771865033793}
+2026-02-23 22:13:54,553 | INFO | trading_bot | client:78 | Response status: 200
+2026-02-23 22:14:05,966 | INFO | trading_bot | orders:39 | Placing LIMIT order: {'symbol': 'BTCUSDT', 'side': 'SELL', 'type': 'LIMIT', 'quantity': 0.01, 'price': 70000.0, 'timeInForce': 'GTC'}
+2026-02-23 22:14:05,966 | INFO | trading_bot | client:58 | Sending POST request to https://demo-fapi.binance.com/fapi/v1/order
+2026-02-23 22:14:05,966 | INFO | trading_bot | client:59 | Request params: {'symbol': 'BTCUSDT', 'side': 'SELL', 'type': 'LIMIT', 'quantity': 0.01, 'price': 70000.0, 'timeInForce': 'GTC', 'timestamp': 1771865045966}
+2026-02-23 22:14:06,793 | INFO | trading_bot | client:78 | Response status: 200
+2026-02-23 22:14:16,341 | INFO | trading_bot | client:58 | Sending GET request to https://demo-fapi.binance.com/fapi/v2/account
+2026-02-23 22:14:16,341 | INFO | trading_bot | client:59 | Request params: {'timestamp': 1771865056341}
+2026-02-23 22:14:17,417 | INFO | trading_bot | client:78 | Response status: 200
